@@ -185,14 +185,21 @@ class ChatManager {
             this.showTypingIndicator();
 
             // Send to n8n webhook
-            const response = await fetch('https://n8ngc.codeblazar.org/webhook/03e221f1-3171-4cf9-8dde-097a2af6a969', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ question: message }),
-            });
-
+            async function query(data) {
+                const response = await fetch(
+                    "https://flowise-production-5296.up.railway.app/api/v1/prediction/f3dc33a4-a6ef-430d-8ead-cd76d55bae98",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(data)
+                    }
+                );
+                const result = await response.json();
+                return result;
+            }
+            
             this.hideTypingIndicator();
 
             if (!response.ok) {
